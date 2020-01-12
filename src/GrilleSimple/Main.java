@@ -12,8 +12,7 @@ public class Main {
 		float tour = 1;
 		Scanner sc = new Scanner(System.in);
 		Grille grille = new Grille();
-		BestBot iRobot = new BestBot(/*new Grille()*/grille);
-		System.out.println(kikiJoue ? "Vous êtes le 1er à jouer" : "Vous jouez en 2nd");
+		BestBot iRobot = new BestBot(new Grille());
 		grille.afficher();
 		while(!grille.fin())
 		{
@@ -37,10 +36,10 @@ public class Main {
 			}
 			grille.jouer(coordonnee, pion);
 			iRobot.add(coordonnee, pion);
-			System.out.println(kikiJoue ? "Player1 a joué : " + coordonnee : "iRobot a joué : " + coordonnee + (DETAILLE ? " | ExecutionTime : " + iRobot.getTemps() + "ms" : ""));
+			System.out.println(kikiJoue ? "Player1 a joué : " + coordonnee : "iRobot a joué : " + coordonnee);
 			grille.afficher();
 			kikiJoue = !kikiJoue;
-			tour-=-.5; // pour le style, car on aime être original.
+			tour+=.5;
 		}
 		System.out.println("FIN DE PARTIE");
 	}

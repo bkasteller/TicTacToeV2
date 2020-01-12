@@ -4,7 +4,6 @@ public class BestBot {
 	private Arbre arbre;
 	private Grille grille;
 	private char pion;
-	private long temps;
 	
 	public BestBot(Grille grille)
 	{
@@ -42,18 +41,19 @@ public class BestBot {
 		{
 			for(int x = 0; x < grille.getTaille(); x++)
 			{
-				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
+				Coordonnee test = new Coordonnee(x, y);
+				if(grille.getCase(test).getContenu() == grille.getCaseVide())
 				{
-					grille.jouer(new Coordonnee(x, y), getPion());
+					grille.jouer(test, getPion());
 					int val = min(PROFONDEUR);
-					System.out.println("(" + x + ";" + y + ") score = " + val);
+					//System.out.println(test + " score = " + val);
 					//grille.afficher();
 					if(val >= max_val)
 					{
 						max_val = val;
-						coordonnee = new Coordonnee(x, y);
+						coordonnee = test;
 					}
-					annuler(new Coordonnee(x, y));
+					annuler(test);
 				}
 			}
 		}
@@ -72,9 +72,10 @@ public class BestBot {
 		{
 			for(int x = 0; x < grille.getTaille(); x++)
 			{
-				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
+				Coordonnee test = new Coordonnee(x, y);
+				if(grille.getCase(test).getContenu() == grille.getCaseVide())
 				{
-					grille.jouer(new Coordonnee(x, y), '?');
+					grille.jouer(test, '?');
 					int val = max(profondeur-1);
 					//System.out.println(" = " + val);
 					//grille.afficher();
@@ -82,7 +83,7 @@ public class BestBot {
 					{
 						min_val = val;
 					}
-					annuler(new Coordonnee(x, y));
+					annuler(test);
 				}
 			}
 		}
@@ -101,9 +102,10 @@ public class BestBot {
 		{
 			for(int x = 0; x < grille.getTaille(); x++)
 			{
-				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
+				Coordonnee test = new Coordonnee(x, y);
+				if(grille.getCase(test).getContenu() == grille.getCaseVide())
 				{
-					grille.jouer(new Coordonnee(x, y), getPion());
+					grille.jouer(test, getPion());
 					int val = min(profondeur-1);
 					//System.out.println(x + " " + y + " : " + val);
 					//grille.afficher();
@@ -111,7 +113,7 @@ public class BestBot {
 					{
 						max_val = val;
 					}
-					annuler(new Coordonnee(x, y));
+					annuler(test);
 				}
 			}
 		}
@@ -224,10 +226,5 @@ public class BestBot {
 	private void annuler(Coordonnee coordonnee)
 	{
 		grille.getCase(coordonnee).setContenu(grille.getCaseVide());
-	}
-	
-	public long getTemps()
-	{
-		return temps;
 	}
 }
