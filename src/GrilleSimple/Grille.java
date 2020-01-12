@@ -33,16 +33,10 @@ public class Grille {
 		{
 			for(int x = 0; x < getTaille(); x++)
 			{
-				Coordonnee coordonnee = new Coordonnee(x, y);
-				grille.put(coordonnee, new Case(coordonnee, CASE_VIDE));
+				grille.put(new Coordonnee(x, y), new Case(CASE_VIDE));
 			}
 		}
 	}
-	
-	public Object clone() throws CloneNotSupportedException 
-	{ 
-		return super.clone();
-	} 
 	
 	public void afficher()
 	{
@@ -66,10 +60,9 @@ public class Grille {
 		}
 	}
 	
-	public Grille jouer(Coordonnee coordonnee, char pion)
+	public void jouer(Coordonnee coordonnee, char pion)
 	{
 		getCase(coordonnee).setContenu(pion);
-		return this;
 	}
 	
 	public boolean fin()
@@ -77,7 +70,8 @@ public class Grille {
 		return verifLigne(getTaille()-1)
 			|| verifCol(getTaille()-1)
 			|| verifDiago1()
-			|| verifDiago2();
+			|| verifDiago2()
+			|| full();
 	}
 	
 	private boolean verifLigne(int y)
@@ -86,19 +80,32 @@ public class Grille {
 		{
 			return false;
 		}
-		int compte = 1;
-		char pion = getCase(new Coordonnee(0, y)).getContenu();
-		for(int x = 1; x < getTaille(); x++)
+		int compte1 = 0, 
+			compte2 = 0;
+		char pion = getCaseVide();
+		for(int x = 0; x < getTaille(); x++)
 		{
 			char contenu = getCase(new Coordonnee(x, y)).getContenu();
-			if (pion == contenu && contenu != getCaseVide())
+			if(contenu != getCaseVide())
 			{
-				compte++;
+				if(pion == getCaseVide())
+				{
+					pion = contenu;
+				}
+				if(pion == contenu && contenu != getCaseVide())
+				{
+					compte1++;
+				}
+				else
+				{
+					compte2++;
+				}
 			}
-			pion = getCase(new Coordonnee(x, y)).getContenu();
 		}
-		if(compte == getTaille())
+		if(compte1 == getTaille() || compte2 == getTaille())
+		{
 			return true;
+		}
 		return verifLigne(y-1);
 	}
 	
@@ -108,55 +115,109 @@ public class Grille {
 		{
 			return false;
 		}
-		int compte = 1;
-		char pion = getCase(new Coordonnee(x, 0)).getContenu();
-		for(int y = 1; y < getTaille(); y++)
+		int compte1 = 0, 
+			compte2 = 0;
+		char pion = getCaseVide();
+		for(int y = 0; y < getTaille(); y++)
 		{
 			char contenu = getCase(new Coordonnee(x, y)).getContenu();
-			if (pion == contenu && contenu != getCaseVide())
+			if(contenu != getCaseVide())
 			{
-				compte++;
+				if(pion == getCaseVide())
+				{
+					pion = contenu;
+				}
+				if(pion == contenu && contenu != getCaseVide())
+				{
+					compte1++;
+				}
+				else
+				{
+					compte2++;
+				}
 			}
-			pion = getCase(new Coordonnee(x, y)).getContenu();
 		}
-		if(compte == getTaille())
+		if(compte1 == getTaille() || compte2 == getTaille())
+		{
 			return true;
+		}
 		return verifCol(x-1);
 	}
 	
 	private boolean verifDiago1()
 	{
-		int compte = 1;
-		char pion = getCase(new Coordonnee(0, 0)).getContenu();
-		for(int i = 1; i < getTaille(); i++)
+		int compte1 = 0, 
+			compte2 = 0;
+		char pion = getCaseVide();
+		for(int i = 0; i < getTaille(); i++)
 		{
 			char contenu = getCase(new Coordonnee(i, i)).getContenu();
-			if (pion == contenu && contenu != getCaseVide())
+			if(contenu != getCaseVide())
 			{
-				compte++;
+				if(pion == getCaseVide())
+				{
+					pion = contenu;
+				}
+				if(pion == contenu && contenu != getCaseVide())
+				{
+					compte1++;
+				}
+				else
+				{
+					compte2++;
+				}
 			}
-			pion = getCase(new Coordonnee(i, i)).getContenu();
 		}
-		if(compte == getTaille())
+		if(compte1 == getTaille() || compte2 == getTaille())
+		{
 			return true;
+		}
 		return false;
 	}
 	
 	private boolean verifDiago2()
 	{
-		int compte = 1;
-		char pion = getCase(new Coordonnee(0, getTaille()-1)).getContenu();
-		for(int i = 1; i < getTaille(); i++)
+		int compte1 = 0, 
+			compte2 = 0;
+		char pion = getCaseVide();
+		for(int i = 0; i < getTaille(); i++)
 		{
-			char contenu = getCase(new Coordonnee(i,getTaille()-i-1)).getContenu();
-			if (pion == contenu && contenu != getCaseVide())
+			char contenu = getCase(new Coordonnee(i, getTaille()-i-1)).getContenu();
+			if(contenu != getCaseVide())
 			{
-				compte++;
+				if(pion == getCaseVide())
+				{
+					pion = contenu;
+				}
+				if(pion == contenu && contenu != getCaseVide())
+				{
+					compte1++;
+				}
+				else
+				{
+					compte2++;
+				}
 			}
-			pion = getCase(new Coordonnee(i,getTaille()-i-1)).getContenu();
 		}
-		if(compte == getTaille())
+		if(compte1 == getTaille() || compte2 == getTaille())
+		{
 			return true;
+		}
 		return false;
+	}
+	
+	private boolean full()
+	{
+		for (int y = 0; y < getTaille(); y++)
+		{
+			for (int x = 0; x < getTaille(); x++)
+			{
+				if(getCase(new Coordonnee(x, y)).getContenu() != getCaseVide())
+				{
+					return true;
+				}
+			}
+		}
+		return true;
 	}
 }

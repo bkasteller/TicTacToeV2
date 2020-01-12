@@ -1,18 +1,11 @@
 package GrilleSimple;
 
 public class Case {
-	private Coordonnee coordonnee;
 	private char contenu;
 	
-	public Case(Coordonnee coordonnee, char pion)
+	public Case(char pion)
 	{
-		this.coordonnee = coordonnee;
 		contenu = pion;
-	}
-	
-	public Coordonnee getCoordonnee()
-	{
-		return coordonnee;
 	}
 	
 	public char getContenu()

@@ -43,8 +43,8 @@ public class Main {
 			tour-=-.5; // pour le style, car on aime être original.
 		}
 		grille.afficher();
-		System.out.println("+-----------------------+");
-		System.out.println(!kikiJoue ? "| VICTOIRE DU JOUEUR 1 |" : "| VICTOIRE DU JOUEUR 2 |");
-		System.out.println("+-----------------------+");
+		System.out.println("+---------------+");
+		System.out.println("| FIN DE PARTIE |");
+		System.out.println("+---------------+");
 	}
 }

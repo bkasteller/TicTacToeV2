@@ -6,9 +6,9 @@ public class BestBot {
 	private char pion;
 	private long temps;
 	
-	public BestBot(Grille copieGrille)
+	public BestBot(Grille grille)
 	{
-		grille = copieGrille;
+		this.grille = grille;
 	}
 	
 	public void add(Coordonnee coordonnee, char pion)
@@ -29,8 +29,8 @@ public class BestBot {
 	public Coordonnee reflechir(char pion)
 	{
 		int max_val = -1000, 
-			PROFONDEUR = 1;
-		Coordonnee coordonnee = new Coordonnee(-1, -1);
+			PROFONDEUR = 10;
+		Coordonnee coordonnee = null;
 		setPion(pion);
 		for(int y = 0; y < grille.getTaille(); y++)
 		{
@@ -38,7 +38,7 @@ public class BestBot {
 			{
 				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
 				{
-					grille = grille.jouer(new Coordonnee(x, y), getPion());
+					grille.jouer(new Coordonnee(x, y), getPion());
 					int val = min(PROFONDEUR);
 					System.out.println(x + " " + y + " : " + val);
 					if(val > max_val)
@@ -51,11 +51,6 @@ public class BestBot {
 			}
 		}
 		return coordonnee;
-	}
-	
-	public void test()
-	{
-		grille.afficher();
 	}
 	
 	private int min(int profondeur)
@@ -71,7 +66,7 @@ public class BestBot {
 			{
 				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
 				{
-					grille = grille.jouer(new Coordonnee(x, y), '?');
+					grille.jouer(new Coordonnee(x, y), '?');
 					int val = max(profondeur-1);
 					if(val < min_val)
 					{
@@ -97,7 +92,7 @@ public class BestBot {
 			{
 				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
 				{
-					grille = grille.jouer(new Coordonnee(x, y), getPion());
+					grille.jouer(new Coordonnee(x, y), getPion());
 					int val = min(profondeur-1);	
 					if(val > max_val)
 					{
@@ -112,8 +107,8 @@ public class BestBot {
 	
 	private int eval()
 	{
-		System.out.println();
-		System.out.println("L: " + verifLigne(grille.getTaille()-1) + " Col: " + verifCol(grille.getTaille()-1) + " D1: " + verifDiago1() + " D2: " + verifDiago2() + " = " + (verifLigne(grille.getTaille()-1) + verifCol(grille.getTaille()-1) + verifDiago1() + verifDiago2()));
+		//System.out.println();
+		//System.out.println("L: " + verifLigne(grille.getTaille()-1) + " Col: " + verifCol(grille.getTaille()-1) + " D1: " + verifDiago1() + " D2: " + verifDiago2() + " = " + (verifLigne(grille.getTaille()-1) + verifCol(grille.getTaille()-1) + verifDiago1() + verifDiago2()));
 		return verifLigne(grille.getTaille()-1)
 			 + verifCol(grille.getTaille()-1)
 			 + verifDiago1()
