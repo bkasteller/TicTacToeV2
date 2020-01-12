@@ -212,9 +212,9 @@ public class Grille {
 		{
 			for (int x = 0; x < getTaille(); x++)
 			{
-				if(getCase(new Coordonnee(x, y)).getContenu() != getCaseVide())
+				if(getCase(new Coordonnee(x, y)).getContenu() == getCaseVide())
 				{
-					return true;
+					return false;
 				}
 			}
 		}

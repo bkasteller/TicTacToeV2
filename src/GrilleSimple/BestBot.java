@@ -26,10 +26,16 @@ public class BestBot {
 		return pion;
 	}
 	
+	private boolean adversePion(char contenu)
+	{
+		return contenu != grille.getCaseVide()
+			&& contenu != getPion();
+	}
+	
 	public Coordonnee reflechir(char pion)
 	{
-		int max_val = -1000, 
-			PROFONDEUR = 10;
+		final int PROFONDEUR = 1;
+		int max_val = -1000;
 		Coordonnee coordonnee = null;
 		setPion(pion);
 		for(int y = 0; y < grille.getTaille(); y++)
@@ -40,8 +46,9 @@ public class BestBot {
 				{
 					grille.jouer(new Coordonnee(x, y), getPion());
 					int val = min(PROFONDEUR);
-					System.out.println(x + " " + y + " : " + val);
-					if(val > max_val)
+					System.out.println("(" + x + ";" + y + ") score = " + val);
+					//grille.afficher();
+					if(val >= max_val)
 					{
 						max_val = val;
 						coordonnee = new Coordonnee(x, y);
@@ -55,6 +62,7 @@ public class BestBot {
 	
 	private int min(int profondeur)
 	{
+		//System.out.print("Min " + profondeur + " | ");
 		if(profondeur == 0 || grille.fin())
 		{
 			return eval();
@@ -68,6 +76,8 @@ public class BestBot {
 				{
 					grille.jouer(new Coordonnee(x, y), '?');
 					int val = max(profondeur-1);
+					//System.out.println(" = " + val);
+					//grille.afficher();
 					if(val < min_val)
 					{
 						min_val = val;
@@ -81,6 +91,7 @@ public class BestBot {
 	
 	private int max(int profondeur)
 	{
+		//System.out.print("Max " + profondeur + " | ");
 		if(profondeur == 0 || grille.fin())
 		{
 			return eval();
@@ -93,7 +104,9 @@ public class BestBot {
 				if(grille.getCase(new Coordonnee(x, y)).getContenu() == grille.getCaseVide())
 				{
 					grille.jouer(new Coordonnee(x, y), getPion());
-					int val = min(profondeur-1);	
+					int val = min(profondeur-1);
+					//System.out.println(x + " " + y + " : " + val);
+					//grille.afficher();
 					if(val > max_val)
 					{
 						max_val = val;
@@ -107,8 +120,6 @@ public class BestBot {
 	
 	private int eval()
 	{
-		//System.out.println();
-		//System.out.println("L: " + verifLigne(grille.getTaille()-1) + " Col: " + verifCol(grille.getTaille()-1) + " D1: " + verifDiago1() + " D2: " + verifDiago2() + " = " + (verifLigne(grille.getTaille()-1) + verifCol(grille.getTaille()-1) + verifDiago1() + verifDiago2()));
 		return verifLigne(grille.getTaille()-1)
 			 + verifCol(grille.getTaille()-1)
 			 + verifDiago1()
@@ -134,6 +145,7 @@ public class BestBot {
 				j2++;
 			}
 		}
+		//System.out.print("L" + y + " : " + calcScore(j1, j2) + "(" + j1 + ";" + j2 + ") ");
 		return verifLigne(y-1) + calcScore(j1, j2);
 	}
 	
@@ -156,6 +168,7 @@ public class BestBot {
 				j2++;
 			}
 		}
+		//System.out.print("Col" + x + " : " + calcScore(j1, j2) + "(" + j1 + ";" + j2 + ") ");
 		return verifCol(x-1) + calcScore(j1, j2);
 	}
 	
@@ -174,6 +187,7 @@ public class BestBot {
 				j2++;
 			}
 		}
+		//System.out.print("Diago1 : " + calcScore(j1, j2) + "(" + j1 + ";" + j2 + ") ");
 		return calcScore(j1, j2);
 	}
 	
@@ -182,7 +196,7 @@ public class BestBot {
 		int j1 = 0, j2 = 0;
 		for(int i = 0; i < grille.getTaille(); i++)
 		{
-			char contenu = grille.getCase(new Coordonnee(i,grille.getTaille()-i-1)).getContenu();
+			char contenu = grille.getCase(new Coordonnee(i, grille.getTaille() - i - 1)).getContenu();
 			if(contenu == getPion())
 			{
 				j1++;
@@ -192,6 +206,7 @@ public class BestBot {
 				j2++;
 			}
 		}
+		//System.out.print("Diago2 : " + calcScore(j1, j2) + "(" + j1 + ";" + j2 + ") ");
 		return calcScore(j1, j2);
 	}
 	
@@ -201,10 +216,8 @@ public class BestBot {
 			return 1000;
 		if(j2 == grille.getTaille())
 			return -1000;
-		if(j1 > 0 && j2 == 0)
-			return j1;
-		if(j2 > 0 && j1 == 0)
-			return -j2;
+		if(j1 == 0 || j2 == 0)
+			return j1 - j2;
 		return 0;
 	}
 	
